@@ -34,22 +34,13 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
-data = LOAD 'data.csv' USING PigStorage(',') 
-    AS (
-        id:int, 
-        name:chararray, 
-        lastName:chararray,
-        date:chararray,
-        color:chararray,
-        numer:chararray
 
-        );
+datos = LOAD 'data.csv' USING PigStorage(',') AS (col1:int, col2:chararray, col3:chararray, col4:datetime, col5:chararray, col6:int);
+data_1 = FOREACH datos GENERATE ToString(col4, 'yyyy-MM-dd') AS fecha, ToString(col4, 'dd,d') AS dia, ToString(col4, 'EEE') AS nombre_pdia, ToString(col4, 'EEEE') AS nombre_dia;;
+data_final =FOREACH data_1 GENERATE fecha, dia, (nombre_pdia == 'Mon'? 'lun':(nombre_pdia == 'Tue'? 'mar':(nombre_pdia == 'Wed'? 'mie': 
+(nombre_pdia == 'Thu'? 'jue':(nombre_pdia == 'Fri'? 'vie':(nombre_pdia == 'Sat'? 'sab':(nombre_pdia == 'Sun'? 'dom':'falso'))))))) as diaAbreviado,  
+(nombre_dia == 'Monday'? 'lunes':(nombre_dia == 'Tuesday'? 'martes':(nombre_dia == 'Wednesday'? 'miercoles': 
+(nombre_dia == 'Thursday'? 'jueves':(nombre_dia == 'Friday'? 'viernes':(nombre_dia == 'Saturday'? 'sabado':(nombre_dia == 'Sunday'? 'domingo':'falso'))))))) as diaCompleto; 
 
-aux = FOREACH data GENERATE ToString(date, 'yyyy-MM-dd') AS date, ToString(date, 'dd,d') AS dia, ToString(date, 'EEE') AS tri_dia, ToString(date, 'EEEE') AS nombre_dia;
 
-sol = FOREACH aux GENERATE date, dia, (tri_dia == 'Mon'? 'lun':(tri_dia == 'Tue'? 'mar':(tri_dia == 'Wed'? 'mie':
-(tri_dia == 'Thu'? 'jue':(tri_dia == 'Fri'? 'vie':(tri_dia == 'Sat'? 'sab':(tri_dia == 'Sun'? 'dom':'falso'))))))) as diaAbreviado,
-(nombre_dia == 'Monday'? 'lunes':(nombre_dia == 'Tuesday'? 'martes':(nombre_dia == 'Wednesday'? 'miercoles':
-(nombre_dia == 'Thursday'? 'jueves':(nombre_dia == 'Friday'? 'viernes':(nombre_dia == 'Saturday'? 'sabado':(nombre_dia == 'Sunday'? 'domingo':'falso'))))))) as diaCompleto;
-
-STORE sol INTO 'output' USING PigStorage(',');
+STORE data_final INTO 'output' USING PigStorage (',');
