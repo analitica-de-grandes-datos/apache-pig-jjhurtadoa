@@ -11,3 +11,15 @@ $ pig -x local -f pregunta.pig
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
+
+data = LOAD 'data.tsv' USING PigStorage('\t')
+    AS (
+            letter:chararray,
+            date:chararray,
+            num:int
+    );
+
+numbers = FOREACH data GENERATE num;
+n_ordered = ORDER numbers BY num ASC;
+first = LIMIT n_ordered 5;
+STORE first INTO 'output' USING PigStorage(',');
