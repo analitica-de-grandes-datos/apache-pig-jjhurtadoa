@@ -44,7 +44,7 @@ data = LOAD 'data.csv' USING PigStorage(',')
 
         );
 
-aux_1 = FOREACH Data_ GENERATE ToString(date, 'yyyy-MM-dd') AS date, ToString(date, 'dd,d') AS dia, ToString(date, 'EEE') AS abrv_dia, ToString(date, 'EEEE') AS nombre_dia;
+aux_1 = FOREACH data GENERATE ToString(date, 'yyyy-MM-dd') AS date, ToString(date, 'dd,d') AS dia, ToString(date, 'EEE') AS abrv_dia, ToString(date, 'EEEE') AS nombre_dia;
 
 sol = FOREACH aux_1 GENERATE date, dia, (abrv_dia == 'Mon'? 'lun':(abrv_dia == 'Tue'? 'mar':(abrv_dia == 'Wed'? 'mie':
 (abrv_dia == 'Thu'? 'jue':(abrv_dia == 'Fri'? 'vie':(abrv_dia == 'Sat'? 'sab':(abrv_dia == 'Sun'? 'dom':'falso'))))))) as diaAbreviado,
