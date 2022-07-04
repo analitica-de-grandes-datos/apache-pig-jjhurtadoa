@@ -34,3 +34,21 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+data = LOAD 'data.csv' USING PigStorage(',') 
+    AS (
+        id:int, 
+        name:chararray, 
+        lastName:chararray,
+        date:chararray,
+        color:chararray
+
+        );
+
+aux_1 = FOREACH Data_ GENERATE ToString(date, 'yyyy-MM-dd') AS date, ToString(date, 'dd,d') AS dia, ToString(date, 'EEE') AS diaAbreviado, ToString(date, 'EEEE') AS nombre_dia;
+
+sol = FOREACH aux_1 GENERATE date, dia, (diaAbreviado == 'Mon'? 'lun':(diaAbreviado == 'Tue'? 'mar':(diaAbreviado == 'Wed'? 'mie':
+(diaAbreviado == 'Thu'? 'jue':(diaAbreviado == 'Fri'? 'vie':(diaAbreviado == 'Sat'? 'sab':(diaAbreviado == 'Sun'? 'dom':'falso'))))))) as diaAbreviado,
+(nombre_dia == 'Monday'? 'lunes':(nombre_dia == 'Tuesday'? 'martes':(nombre_dia == 'Wednesday'? 'miercoles':
+(nombre_dia == 'Thursday'? 'jueves':(nombre_dia == 'Friday'? 'viernes':(nombre_dia == 'Saturday'? 'sabado':(nombre_dia == 'Sunday'? 'domingo':'falso'))))))) as diaCompleto;
+
+STORE sol INTO 'output' USING PigStorage(',');

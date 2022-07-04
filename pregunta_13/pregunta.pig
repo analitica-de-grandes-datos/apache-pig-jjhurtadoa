@@ -36,7 +36,3 @@ colors = FOREACH filtered GENERATE color;
 
 STORE colors INTO 'output' USING PigStorage(',');
 
-filtered_colors = FILTER data BY (color MATCHES '.*^[b].*');
-colors = FOREACH filtered_colors GENERATE color;
-
-STORE colors INTO 'output' USING PigStorage(',');
