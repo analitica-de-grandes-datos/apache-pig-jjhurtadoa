@@ -40,7 +40,8 @@ data = LOAD 'data.csv' USING PigStorage(',')
         name:chararray, 
         lastName:chararray,
         date:chararray,
-        color:chararray
+        color:chararray,
+        numer:chararray
 
         );
 
