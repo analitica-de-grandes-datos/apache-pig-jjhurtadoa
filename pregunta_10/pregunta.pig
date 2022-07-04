@@ -21,3 +21,18 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+data = LOAD 'data.csv' USING PigStorage(',')
+    AS (
+            id:int,
+            name:chararray,
+            lastName:chararray,
+            date:chararray,
+            color:chararray,
+            number: int
+    );
+
+counted = FOREACH data GENERATE lastName, SIZE(lastName) as length_last;
+ordered = ORDER counted BY length_last DESC, lastName ASC;
+limited = LIMIT ordered 5;
+
+STORE limited INTO 'output' USING PigStorage(',');

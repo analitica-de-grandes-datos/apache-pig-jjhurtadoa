@@ -17,3 +17,15 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+data = LOAD 'data.tsv' 
+    AS (
+        c1:chararray, 
+        c2:BAG{tup:TUPLE(chararray)},
+        c3:MAP[]
+       );
+
+tuples = FOREACH data  GENERATE FLATTEN(c2) AS cbag, FLATTEN(c3) AS cmap;
+grouped = GROUP tuples BY (cbag, cmap);
+counted = FOREACH grouped GENERATE group, COUNT(tuples);
+
+STORE counted INTO 'output' USING PigStorage(',');

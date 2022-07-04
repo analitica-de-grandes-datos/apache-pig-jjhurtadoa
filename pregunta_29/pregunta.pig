@@ -34,3 +34,19 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+data = LOAD 'data.csv' USING PigStorage(',') 
+    AS (
+        id:int, 
+        name:chararray, 
+        lastName:chararray,
+        date:chararray,
+        color:chararray
+
+        );
+
+date_aux = FOREACH data GENERATE date, LOWER(ToString(ToDate(date), 'MMM')) AS nombre_mes, SUBSTRING(date,5,7) AS mes, GetMonth(ToDate(date)) AS month;
+date_aux = FOREACH date_aux GENERATE date, REPLACE(nombre_mes, 'jan', 'ene') AS nombre_mes, mes, month;
+date_aux = FOREACH date_aux GENERATE date, REPLACE(nombre_mes, 'apr', 'abr') AS nombre_mes, mes, month;
+date_aux = FOREACH date_aux GENERATE date, REPLACE(nombre_mes, 'aug', 'ago') AS nombre_mes, mes, month;
+date_aux = FOREACH date_aux GENERATE date, REPLACE(nombre_mes, 'dec', 'dic') AS nombre_mes, mes, month;
+STORE date_aux INTO 'output' USING PigStorage(',');
