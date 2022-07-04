@@ -44,10 +44,10 @@ data = LOAD 'data.csv' USING PigStorage(',')
 
         );
 
-aux_1 = FOREACH Data_ GENERATE ToString(date, 'yyyy-MM-dd') AS date, ToString(date, 'dd,d') AS dia, ToString(date, 'EEE') AS diaAbreviado, ToString(date, 'EEEE') AS nombre_dia;
+aux_1 = FOREACH Data_ GENERATE ToString(date, 'yyyy-MM-dd') AS date, ToString(date, 'dd,d') AS dia, ToString(date, 'EEE') AS abrv_dia, ToString(date, 'EEEE') AS nombre_dia;
 
-sol = FOREACH aux_1 GENERATE date, dia, (diaAbreviado == 'Mon'? 'lun':(diaAbreviado == 'Tue'? 'mar':(diaAbreviado == 'Wed'? 'mie':
-(diaAbreviado == 'Thu'? 'jue':(diaAbreviado == 'Fri'? 'vie':(diaAbreviado == 'Sat'? 'sab':(diaAbreviado == 'Sun'? 'dom':'falso'))))))) as diaAbreviado,
+sol = FOREACH aux_1 GENERATE date, dia, (abrv_dia == 'Mon'? 'lun':(abrv_dia == 'Tue'? 'mar':(abrv_dia == 'Wed'? 'mie':
+(abrv_dia == 'Thu'? 'jue':(abrv_dia == 'Fri'? 'vie':(abrv_dia == 'Sat'? 'sab':(abrv_dia == 'Sun'? 'dom':'falso'))))))) as diaAbreviado,
 (nombre_dia == 'Monday'? 'lunes':(nombre_dia == 'Tuesday'? 'martes':(nombre_dia == 'Wednesday'? 'miercoles':
 (nombre_dia == 'Thursday'? 'jueves':(nombre_dia == 'Friday'? 'viernes':(nombre_dia == 'Saturday'? 'sabado':(nombre_dia == 'Sunday'? 'domingo':'falso'))))))) as diaCompleto;
 
