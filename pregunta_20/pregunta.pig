@@ -31,7 +31,7 @@ data = LOAD 'data.csv' USING PigStorage(',')
         color:chararray
         );
 
-filtered = FILTER data BY  (color MATCHES '^[^b].*);
+filtered = FILTER data BY  (color MATCHES '^[^b].*');
 colors = FOREACH filtered GENERATE name, color;
 
 STORE colors INTO 'output' USING PigStorage(',');

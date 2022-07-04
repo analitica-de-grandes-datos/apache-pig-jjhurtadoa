@@ -32,4 +32,4 @@ data = LOAD 'data.csv' USING PigStorage(',')
 filtered = FILTER data BY (color MATCHES 'blue') AND (name MATCHES '.*^[Z].*');
 colors = FOREACH filtered GENERATE name, color;
 
-STORE colors INTO 'output' USING PigStorage(',');
+STORE colors INTO 'output' USING PigStorage(' '); 
